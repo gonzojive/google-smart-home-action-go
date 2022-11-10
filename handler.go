@@ -308,8 +308,11 @@ type executePayload struct {
 	} `json:"commands"`
 }
 type executeRespPayload struct {
-	IDs       []string               `json:"ids,omitempty"`
-	Status    string                 `json:"status,omitempty"`
+	IDs []string `json:"ids,omitempty"`
+	// SUCCESS, PENDING, OFFLINE, EXCEPTIONS, ERROR.
+	Status string `json:"status,omitempty"`
+	// Expanding ERROR state if needed from the preset error codes, which will
+	// map to the errors presented to users.
 	ErrorCode string                 `json:"errorCode,omitempty"`
 	States    map[string]interface{} `json:"states,omitempty"`
 }
@@ -332,6 +335,14 @@ type queryResponse struct {
 type executeResponse struct {
 	RequestID string `json:"requestId,omitempty"`
 	Payload   struct {
+		// Detailed error which will never be presented to users but may be logged or used during development.
+		DebugString string `json:"debugString,omitempty"`
+
+		// An error code for the entire transaction for auth failures and developer
+		// system unavailability. For individual device errors, use the errorCode
+		// within the device object.
+		ErrorCode string `json:"errorCode,omitempty"`
+
 		Commands []executeRespPayload `json:"commands"`
 	} `json:"payload"`
 }
