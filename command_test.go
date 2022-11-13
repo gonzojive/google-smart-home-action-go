@@ -19,15 +19,15 @@ func TestCommandUnmarshalJSON(t *testing.T) {
 		{
 			name: "thermostat command - typical",
 			input: `{
-				"command":"action.devices.commands.ThermostatTemperatureSetpoint",
+				"command":"action.devices.commands.FakeGenericCommand",
 				"params":{
 				   "thermostatTemperatureSetpoint": 42.42
 				}
 			 }`,
 			want: &Command{
-				Name: "action.devices.commands.ThermostatTemperatureSetpoint",
+				Name: "action.devices.commands.FakeGenericCommand",
 				Generic: &CommandGeneric{
-					Command: "action.devices.commands.ThermostatTemperatureSetpoint",
+					Command: "action.devices.commands.FakeGenericCommand",
 					Params: map[string]interface{}{
 						"thermostatTemperatureSetpoint": 42.42,
 					},
@@ -37,24 +37,24 @@ func TestCommandUnmarshalJSON(t *testing.T) {
 		{
 			name: "thermostat command - empty params object",
 			input: `{
-				"command":"action.devices.commands.ThermostatTemperatureSetpoint",
+				"command":"action.devices.commands.FakeGenericCommand",
 				"params":{}
 			 }`,
 			want: &Command{
-				Name: "action.devices.commands.ThermostatTemperatureSetpoint",
+				Name: "action.devices.commands.FakeGenericCommand",
 				Generic: &CommandGeneric{
-					Command: "action.devices.commands.ThermostatTemperatureSetpoint",
+					Command: "action.devices.commands.FakeGenericCommand",
 					Params:  map[string]interface{}{},
 				},
 			},
 		},
 		{
 			name:  "thermostat command - missing params object",
-			input: `{"command":"action.devices.commands.ThermostatTemperatureSetpoint"}`,
+			input: `{"command":"action.devices.commands.FakeGenericCommand"}`,
 			want: &Command{
-				Name: "action.devices.commands.ThermostatTemperatureSetpoint",
+				Name: "action.devices.commands.FakeGenericCommand",
 				Generic: &CommandGeneric{
-					Command: "action.devices.commands.ThermostatTemperatureSetpoint",
+					Command: "action.devices.commands.FakeGenericCommand",
 					Params:  nil,
 				},
 			},
@@ -84,6 +84,21 @@ func TestCommandUnmarshalJSON(t *testing.T) {
 				Name: "action.devices.commands.SetFanSpeed",
 				SetFanSpeed: &CommandSetFanSpeed{
 					FanSpeed: ptrString("low"),
+				},
+			},
+		},
+		{
+			name: "set thermostat",
+			input: `{
+				"command": "action.devices.commands.ThermostatTemperatureSetpoint",
+				"params":{
+					"thermostatTemperatureSetpoint":21.5
+				}
+			}`,
+			want: &Command{
+				Name: "action.devices.commands.ThermostatTemperatureSetpoint",
+				ThermostatTemperatureSetpoint: &CommandThermostatTemperatureSetpoint{
+					ThermostatTemperatureSetpointCelcius: 21.5,
 				},
 			},
 		},
