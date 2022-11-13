@@ -72,6 +72,21 @@ func TestCommandUnmarshalJSON(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "set fan speed command",
+			input: `{
+				"command": "action.devices.commands.SetFanSpeed",
+				"params": {
+					"fanSpeed": "low"
+				}
+			}`,
+			want: &Command{
+				Name: "action.devices.commands.SetFanSpeed",
+				SetFanSpeed: &CommandSetFanSpeed{
+					FanSpeed: ptrString("low"),
+				},
+			},
+		},
 	} {
 		t.Run(example.name, func(t *testing.T) {
 			got := &Command{}
@@ -154,3 +169,5 @@ func roundtripJSON(in, out interface{}) error {
 	}
 	return nil
 }
+
+func ptrString(t string) *string { return &t }

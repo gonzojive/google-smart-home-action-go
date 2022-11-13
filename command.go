@@ -21,6 +21,7 @@ type Command struct {
 	SetInput           *CommandSetInput
 	NextInput          *CommandNextInput
 	PreviousInput      *CommandPreviousInput
+	SetFanSpeed        *CommandSetFanSpeed
 }
 
 // MarshalJSON is a custom JSON serializer for our Command
@@ -44,6 +45,8 @@ func (c Command) MarshalJSON() ([]byte, error) {
 		details = c.AdjustVolume
 	case "action.devices.commands.SetInput":
 		details = c.SetInput
+	case "action.devices.commands.SetFanSpeed":
+		details = c.SetFanSpeed
 	case "action.devices.commands.NextInput":
 		details = c.NextInput
 	case "action.devices.commands.PreviousInput":
@@ -101,6 +104,9 @@ func (c *Command) UnmarshalJSON(data []byte) error {
 	case "action.devices.commands.SetInput":
 		c.SetInput = &CommandSetInput{}
 		details = c.SetInput
+	case "action.devices.commands.SetFanSpeed":
+		c.SetFanSpeed = &CommandSetFanSpeed{}
+		details = c.SetFanSpeed
 	case "action.devices.commands.NextInput":
 		c.NextInput = &CommandNextInput{}
 		details = c.NextInput
@@ -171,6 +177,19 @@ type CommandOnOff struct {
 // See https://developers.google.com/assistant/smarthome/traits/volume
 type CommandMute struct {
 	Mute bool `json:"mute"`
+}
+
+// CommandSetFanSpeed requests the device fan speed be set to the specified
+// value.
+//
+// See https://developers.google.com/assistant/smarthome/traits/fanspeed
+type CommandSetFanSpeed struct {
+	// The requested speed setting of the fan, which corresponds to one of the
+	// settings specified during the sync response.
+	FanSpeed *string `json:"fanSpeed,omitempty"`
+
+	// The requested speed setting percentage (0-100).
+	FanSpeedPercent *float32 `json:"fanSpeedPercent,omitempty"`
 }
 
 // CommandSetVolume requests the device volume be set to the specified value.
