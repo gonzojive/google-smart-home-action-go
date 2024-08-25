@@ -127,10 +127,14 @@ func (c *Command) UnmarshalJSON(data []byte) error {
 		}
 		return nil
 	}
+	paramsRawJson := tmp.Params
+	if len(paramsRawJson) == 0 {
+		paramsRawJson = []byte("null")
+	}
 
-	err = json.Unmarshal(tmp.Params, details)
+	err = json.Unmarshal(paramsRawJson, details)
 	if err != nil {
-		return fmt.Errorf("error unmarshaling command Params into details: %w", err)
+		return fmt.Errorf("error unmarshaling command JSON 'params' value, %s, into details: %w", string(paramsRawJson), err)
 	}
 
 	return nil
@@ -201,7 +205,7 @@ type CommandSetFanSpeed struct {
 // CommandThermostatTemperatureSetpoint requests the target temperature be set
 // to a particular temperature.
 //
-// See https://developers.google.com/assistant/smarthome/traits/fanspeed
+// [ThermostatTemperatureSetpoint documentation by Google]: https://developers.home.google.com/cloud-to-cloud/traits/temperaturesetting#action.devices.commands.thermostattemperaturesetpoint
 type CommandThermostatTemperatureSetpoint struct {
 	// Target temperature setpoint. Supports up to one decimal place.
 	ThermostatTemperatureSetpointCelcius float32 `json:"thermostatTemperatureSetpoint"`

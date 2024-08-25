@@ -19,44 +19,35 @@ func TestCommandUnmarshalJSON(t *testing.T) {
 		{
 			name: "thermostat command - typical",
 			input: `{
-				"command":"action.devices.commands.FakeGenericCommand",
+				"command":"action.devices.commands.ThermostatTemperatureSetpoint",
 				"params":{
 				   "thermostatTemperatureSetpoint": 42.42
 				}
 			 }`,
 			want: &Command{
-				Name: "action.devices.commands.FakeGenericCommand",
-				Generic: &CommandGeneric{
-					Command: "action.devices.commands.FakeGenericCommand",
-					Params: map[string]interface{}{
-						"thermostatTemperatureSetpoint": 42.42,
-					},
+				Name: "action.devices.commands.ThermostatTemperatureSetpoint",
+				ThermostatTemperatureSetpoint: &CommandThermostatTemperatureSetpoint{
+					ThermostatTemperatureSetpointCelcius: 42.42,
 				},
 			},
 		},
 		{
 			name: "thermostat command - empty params object",
 			input: `{
-				"command":"action.devices.commands.FakeGenericCommand",
-				"params":{}
+				"command":"action.devices.commands.ThermostatTemperatureSetpoint",
+				"params":{
+				}
 			 }`,
 			want: &Command{
-				Name: "action.devices.commands.FakeGenericCommand",
-				Generic: &CommandGeneric{
-					Command: "action.devices.commands.FakeGenericCommand",
-					Params:  map[string]interface{}{},
-				},
+				Name:                          "action.devices.commands.ThermostatTemperatureSetpoint",
+				ThermostatTemperatureSetpoint: &CommandThermostatTemperatureSetpoint{},
 			},
 		},
 		{
-			name:  "thermostat command - missing params object",
-			input: `{"command":"action.devices.commands.FakeGenericCommand"}`,
+			input: `{"command":"action.devices.commands.ThermostatTemperatureSetpoint"}`,
 			want: &Command{
-				Name: "action.devices.commands.FakeGenericCommand",
-				Generic: &CommandGeneric{
-					Command: "action.devices.commands.FakeGenericCommand",
-					Params:  nil,
-				},
+				Name:                          "action.devices.commands.ThermostatTemperatureSetpoint",
+				ThermostatTemperatureSetpoint: &CommandThermostatTemperatureSetpoint{},
 			},
 		},
 		{
